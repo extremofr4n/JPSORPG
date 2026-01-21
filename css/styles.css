@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+body {
+    font-family: 'Ubuntu', sans-serif; 
+    background-image:url("../imagens/Background.webp"); 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-attachment: fixed; 
+    background-position: center center;
+}
+.navbar-custom { 
+    background-color: #161616;
+}
+
+.navbar-custom .nav-link, .navbar-custom .navbar-brand {
+    color: #ffffff
+}
+
+.navbar-custom .nav-link.active {
+    font-weight: bold;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #4cc9f0
+}
+
+.pagebg {
+background-color: rgba(255, 255, 255, 0.7); 
+margin: auto;
+padding: 20px 20px;
+}
+
+.text-capitalize{
+    color: #3e35bd
+}
+
+.carousel-control-prev {
+    top: 10px;
+    left: -50px;
+}
+
+.carousel-control-next {
+   top: 10px;
+   right: -50px; 
+}
+@media (min-width: 1200px) {
+  .navbar .dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+}
