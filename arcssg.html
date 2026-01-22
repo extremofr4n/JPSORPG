@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+ <nav class="navbar navbar-expand-xl navbar-custom navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                Junkyard Protocol | EcoTargets RPG
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto fs-5 gap-lg-5">
+                <li class="nav-item">
+                    <a class="nav-link " href="index.html">Home Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="characters.html">Factions & Characters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="awards.html">RPG Season 1 Awards</a>
+                </li>
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" href="arcs.html" id="arcsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> ARCS </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="arcnull.html">Main Arc - Null</a></li>
+                        <li><a class="dropdown-item" href="arctry.html">Try Arc</a></li>
+                        <li><a class="dropdown-item" href="arcssg.html">SSG Arc</a></li>
+                        <li><a class="dropdown-item" href="arcpart.html">Par-T Arc</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="survey.html">Survey</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="pagebg container">
+    
+            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script>
+  document.querySelectorAll('.navbar .dropdown-toggle').forEach(link => {
+    link.addEventListener('click', function (e) {
+      window.location.href = this.getAttribute('href');
+    });
+  });
+</script>
+</body>
+</html>

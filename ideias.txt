@@ -1,0 +1,3 @@
+Index - RPG's Synopse, System, and World Description
+Arcs.html - put anchors in each arc so that when you click in the menu it redirects you to the specific arc; Por cada boss pôr um modal com o boss theme dele; Breadcrumbs on each arc, returning to home page with a button redirecting to each arc page
+Progress - Survey Completion Percentage
