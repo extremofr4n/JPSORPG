@@ -29,7 +29,7 @@
                     <a class="nav-link" href="awards.html">RPG Season 1 Awards</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="arcs.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         ARCS
                     </a>
                     <ul class="dropdown-menu">
@@ -212,5 +212,12 @@
 </div>
 <!--End-->
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script>
+  document.querySelectorAll('.navbar .dropdown-toggle').forEach(link => {
+    link.addEventListener('click', function (e) {
+      window.location.href = this.getAttribute('href');
+    });
+  });
+</script>
 </body>
 </html>

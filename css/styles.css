@@ -43,6 +43,18 @@ padding: 20px 20px;
    top: 10px;
    right: -50px; 
 }
+
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 2rem 0;
+}
+
 @media (min-width: 1200px) {
   .navbar .dropdown:hover > .dropdown-menu {
     display: block;
