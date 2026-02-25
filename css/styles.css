@@ -55,6 +55,22 @@ padding: 20px 20px;
   margin: 2rem 0;
 }
 
+.navmaluca {
+    padding-top:50px;
+}
+
+.card-popout a {
+    text-decoration: none; /* Remove underline if any */
+    color: inherit;        /* Keep text color */
+}
+
+.card-popout:hover {
+    transform: scale(1.03);       /* Slight zoom */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Lift effect */
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+} 
+
 @media (min-width: 1200px) {
   .navbar .dropdown:hover > .dropdown-menu {
     display: block;
