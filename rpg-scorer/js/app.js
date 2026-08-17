@@ -24,6 +24,11 @@ const $ = selector => document.querySelector(selector);
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)];
 const scoreFor = (character, category) => character.scores[category] ?? '';
 const scoreLabel = score => score === '' ? '' : String(score);
+const bestAvailableStatFor = (character, availableCategories) => {
+  const scoredCategories = availableCategories.map(category => ({ category, score: Number(scoreFor(character, category)) || 0 }));
+  const score = Math.max(...scoredCategories.map(item => item.score));
+  return { categories: scoredCategories.filter(item => item.score === score).map(item => item.category), score };
+};
 
 function renderCategories() {
   $('#category-tracker').innerHTML = categories.map((category, index) => {
@@ -50,13 +55,14 @@ function drawCharacter() {
   $('#character-card').classList.add('is-rolling');
   let steps = 0;
   const finalCharacter = randomCharacter();
+  const availableCategories = categories.filter(category => !picked.some(item => item.category === category));
   const reel = setInterval(() => {
     renderCharacter(randomCharacter());
     steps++;
     if (steps < 14) return;
     clearInterval(reel);
     current = finalCharacter;
-    drawnCharacters.push(current);
+    drawnCharacters.push({ character: current, availableCategories });
     renderCharacter(current);
     $('#character-card').classList.remove('is-rolling');
     rolling = false;
@@ -66,7 +72,7 @@ function drawCharacter() {
 
 function selectCategory(category) {
   if (rolling) return;
-  if (Math.random() < 0.01) {
+  if (Math.random() < 0.05) {
     showJumpscare(() => saveCategory(category));
     return;
   }
@@ -74,7 +80,8 @@ function selectCategory(category) {
 }
 
 function saveCategory(category) {
-  picked.push({ category, character: current.name, image: current.image, score: scoreFor(current, category), drawIndex: drawnCharacters.length - 1 });
+  const draw = drawnCharacters[drawnCharacters.length - 1];
+  picked.push({ category, character: current.name, image: current.image, score: scoreFor(current, category), drawIndex: drawnCharacters.length - 1, bestAvailable: bestAvailableStatFor(current, draw.availableCategories) });
   if (picked.length === categories.length) return showResult();
   drawCharacter();
 }
@@ -99,10 +106,9 @@ function showResult() {
   const optimalDraft = getOptimalDraft(drawnCharacters);
   $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${optimalDraft.total}</strong><small>best possible from your draws</small>`;
   $('#score-grid').innerHTML = picked.map(item => {
-    const optimalStat = optimalDraft.assignments[item.drawIndex];
-    const optimalScore = optimalStat ? scoreLabel(scoreFor(drawnCharacters[item.drawIndex], optimalStat)) : '';
-    const optimalHint = expertMode && optimalStat ? `(${optimalStat}${optimalScore ? ` ${optimalScore}` : ''}) ` : '';
-    return `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${optimalHint}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`;
+    const selectedScore = Number(item.score) || 0;
+    const bestHint = expertMode && item.bestAvailable.score > selectedScore ? `(${item.bestAvailable.categories.join(' / ')} ${item.bestAvailable.score}) ` : '';
+    return `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${bestHint}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`;
   }).join('');
 }
 
@@ -110,7 +116,8 @@ function getOptimalDraft(charactersDrawn) {
   let drafts = Array(1 << categories.length);
   drafts[0] = { total: 0, assignments: [] };
 
-  charactersDrawn.forEach(character => {
+  charactersDrawn.forEach(draw => {
+    const character = draw.character;
     const nextDrafts = Array(1 << categories.length);
     drafts.forEach((draft, usedCategories) => {
       if (!draft) return;
