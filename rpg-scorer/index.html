@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junkyard Protocol · Character Draft</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-xl navbar-custom navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Junkyard Protocol | EcoTargets RPG</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="siteNav">
+        <ul class="navbar-nav ms-auto fs-5 gap-xl-5">
+          <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page">Character Draft</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html">Return to Wiki</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pagebg container my-4 my-md-5">
+    <section class="landing text-center py-4 py-md-5" id="landing">
+      <h1 class="text-capitalize fw-bold">Build Your Perfect Character</h1>
+      <p class="lead mx-auto mt-4">A character appears. Click the category you want to keep, then a new character is drawn. Complete every category to finish your survivor.</p>
+      <button class="btn btn-primary btn-lg mt-3" id="start-button" type="button">Start Draft</button>
+      <p class="text-muted small mt-3 mb-0">11 categories · choose only one quality from each character</p>
+    </section>
+
+    <section class="draft hidden" id="draft">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div><h1 class="text-capitalize fw-bold mb-1">Character Draft</h1></div>
+        <button class="btn btn-outline-secondary" type="button" id="restart-button">Reset draft</button>
+      </div>
+      <div class="row g-2 mb-5" id="category-tracker" aria-label="Categories to collect"></div>
+
+      <div class="empty-roster text-center p-5" id="empty-roster">
+        <h3 class="fw-bold">Character roster needed</h3>
+        <p class="mb-0">Add your own characters to <code>js/app.js</code>. Their image and available stats will appear here automatically.</p>
+      </div>
+
+      <article class="character-card hidden card border-0 shadow-sm mb-4" id="character-card">
+        <div class="card-body text-center py-4">
+          <div class="character-image" id="character-image"><span>?</span></div>
+          <h2 class="card-title display-4 fw-bold mt-3 mb-0" id="character-name">Name</h2>
+        </div>
+      </article>
+    </section>
+
+    <section class="finished hidden text-center py-3" id="result">
+      <h1 class="text-capitalize fw-bold">Your Perfect Character</h1>
+      <p class="lead text-muted">Every category has been selected.</p>
+      <div class="row g-2 text-start my-4" id="score-grid"></div>
+      <button class="btn btn-primary btn-lg" id="play-again" type="button">Draft again</button>
+    </section>
+  </main>
+  <footer>© Francisco Preto 2026</footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

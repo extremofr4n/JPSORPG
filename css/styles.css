@@ -72,6 +72,15 @@ padding: 20px 20px;
 } 
 
 @media (min-width: 1200px) {
+  .navbar-custom .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar-custom .navbar-nav.fs-5 {
+    font-size: 1rem !important;
+    gap: 0.75rem !important;
+  }
+
   .navbar .dropdown:hover > .dropdown-menu {
     display: block;
     margin-top: 0;
