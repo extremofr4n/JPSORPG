@@ -66,6 +66,14 @@ function drawCharacter() {
 
 function selectCategory(category) {
   if (rolling) return;
+  if (Math.random() < 0.01) {
+    showJumpscare(() => saveCategory(category));
+    return;
+  }
+  saveCategory(category);
+}
+
+function saveCategory(category) {
   picked.push({ category, character: current.name, image: current.image, score: scoreFor(current, category), drawIndex: drawnCharacters.length - 1 });
   if (picked.length === categories.length) return showResult();
   drawCharacter();
@@ -92,7 +100,9 @@ function showResult() {
   $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${optimalDraft.total}</strong><small>best possible from your draws</small>`;
   $('#score-grid').innerHTML = picked.map(item => {
     const optimalStat = optimalDraft.assignments[item.drawIndex];
-    return `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${expertMode && optimalStat ? `(${optimalStat}) ` : ''}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`;
+    const optimalScore = optimalStat ? scoreLabel(scoreFor(drawnCharacters[item.drawIndex], optimalStat)) : '';
+    const optimalHint = expertMode && optimalStat ? `(${optimalStat}${optimalScore ? ` ${optimalScore}` : ''}) ` : '';
+    return `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${optimalHint}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`;
   }).join('');
 }
 
@@ -117,6 +127,27 @@ function getOptimalDraft(charactersDrawn) {
   });
 
   return drafts.reduce((best, draft) => !draft || best && best.total >= draft.total ? best : draft, null);
+}
+
+function showJumpscare(onComplete) {
+  rolling = true;
+  renderCategories();
+  const jumpscare = $('#jumpscare');
+  const sound = $('#jumpscare-sound');
+  jumpscare.classList.remove('hidden');
+  jumpscare.setAttribute('aria-hidden', 'false');
+  sound.pause();
+  sound.currentTime = 0;
+  sound.volume = 1;
+  sound.play().catch(() => {});
+  setTimeout(() => {
+    jumpscare.classList.add('hidden');
+    jumpscare.setAttribute('aria-hidden', 'true');
+    sound.pause();
+    sound.currentTime = 0;
+    rolling = false;
+    onComplete();
+  }, 1800);
 }
 
 $('#start-button').addEventListener('click', start);
