@@ -18,6 +18,8 @@ const characters = characterFiles.map(file => {
 let current = null;
 let picked = [];
 let rolling = false;
+let expertMode = false;
+let drawnCharacters = [];
 const $ = selector => document.querySelector(selector);
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)];
 const scoreFor = (character, category) => character.scores[category] ?? '';
@@ -26,7 +28,7 @@ const scoreLabel = score => score === '' ? '' : String(score);
 function renderCategories() {
   $('#category-tracker').innerHTML = categories.map((category, index) => {
     const choice = picked.find(item => item.category === category);
-    const score = choice ? scoreLabel(choice.score) : current && !rolling ? scoreLabel(scoreFor(current, category)) : '';
+    const score = expertMode ? '' : choice ? scoreLabel(choice.score) : current && !rolling ? scoreLabel(scoreFor(current, category)) : '';
     const character = choice ? `<em>${choice.character}</em>` : '';
     return `<div class="col-sm-6 col-lg-4"><button class="category ${choice ? 'complete' : ''}" type="button" data-category="${category}" ${choice || rolling ? 'disabled' : ''}><small>${String(index + 1).padStart(2, '0')}</small><span><strong>${category}</strong>${character}</span>${score ? `<b class="category-score">${score}</b>` : ''}</button></div>`;
   }).join('');
@@ -54,6 +56,7 @@ function drawCharacter() {
     if (steps < 14) return;
     clearInterval(reel);
     current = finalCharacter;
+    drawnCharacters.push(current);
     renderCharacter(current);
     $('#character-card').classList.remove('is-rolling');
     rolling = false;
@@ -71,6 +74,8 @@ function selectCategory(category) {
 function start() {
   picked = [];
   current = null;
+  drawnCharacters = [];
+  expertMode = $('#expert-mode').checked;
   $('#landing').classList.add('hidden');
   $('#result').classList.add('hidden');
   $('#draft').classList.remove('hidden');
@@ -83,9 +88,29 @@ function showResult() {
   $('#draft').classList.add('hidden');
   $('#result').classList.remove('hidden');
   const currentTotal = picked.reduce((total, item) => total + (Number(item.score) || 0), 0);
-  const maximumTotal = scoreKeys.length * 5;
-  $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${maximumTotal}</strong>`;
+  const optimalTotal = getOptimalTotal(drawnCharacters);
+  $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${optimalTotal}</strong><small>best possible from your draws</small>`;
   $('#score-grid').innerHTML = picked.map(item => `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`).join('');
+}
+
+function getOptimalTotal(charactersDrawn) {
+  let totals = Array(1 << categories.length).fill(-Infinity);
+  totals[0] = 0;
+
+  charactersDrawn.forEach(character => {
+    const nextTotals = Array(1 << categories.length).fill(-Infinity);
+    totals.forEach((total, usedCategories) => {
+      if (total === -Infinity) return;
+      categories.forEach((category, index) => {
+        if (usedCategories & (1 << index)) return;
+        const newMask = usedCategories | (1 << index);
+        nextTotals[newMask] = Math.max(nextTotals[newMask], total + (Number(scoreFor(character, category)) || 0));
+      });
+    });
+    totals = nextTotals;
+  });
+
+  return Math.max(...totals);
 }
 
 $('#start-button').addEventListener('click', start);
