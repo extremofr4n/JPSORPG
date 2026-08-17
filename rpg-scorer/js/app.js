@@ -1,5 +1,7 @@
 const categories = ['Weapon', 'Skill', 'Strength', 'Speed', 'Durability', 'Stamina', 'Stealth', 'Battle IQ', 'IQ', 'Ability', 'Social Class', 'Age'];
 const scoreKeys = categories.slice(0, 10);
+const jumpscareFiles = ['ce_veridico.gif', 'Captura de ecrã 2025-04-11 212836.png', 'Screenshot 2025-08-22 003301.png', 'Screenshot 2025-10-06 195139.png', 'asf.gif', 'image-removebg-preview-modified.png', 'sligga_-_Cópia-removebg-preview.png'];
+const jumpscareSounds = ['Lobotomy Sound Effect (DOWNLOAD).mp3', 'Spongebob Fail - Sound Effect HD.mp3', 'Android Notification Meme Sound Effect.mp3'];
 
 const characterFiles = ['5Lean-GUI.png','Amp.png','Berto.png','Bite.png','Biyo.png','Blueberry.png','Bubblegum.png','Candle.png','Cask.png','Cel (Season2).png','Cel(Pre-ParT).png','Chuni (Season1).png','Chuni (Season2).png','Claw.png','Coky.png','Cricket.png','Cytra (Season1).png','Cytra (Season2).png','Dent (Season1).png','Dent (Season2).png','Dirge.png','Dizzy.png','Doxx.png','Eht.png','Elra.png','Entei.png','Entropy.png','Fara.png','Fig.png','Forty.png','Gate.png','Grafi.png','Hatty.png','Holly.png','HoodedFigure.png','Ian.png','Igra.png','Iram.png','Jul.png','Kal.png','Kits.png','Kora.png','Line.png','Link.png','Lit.png','Lomi.png','Look.png','Loon.png','Lulu (Season2).png','Lulu.png','Lun.png','Lyt (Product).png','Maker.png','Mann.png','Mansion.png','Match.png','Mira (Season1).png','Mira (Season2).png','MiraDad.png','MiraMom.png','Mone (Season1).png','Mone (Season2).png','Navi (Season1).png','Navi (Season2).png','Ness.png','Null (Season 1).png','Null (Season2).png','Olive.png','ParTee.png','Petrol.png','Phobia.png','Plum.png','PPSH.png','Protocol V Admin.png','Random SSG Lackey.png','Raspberry.png','RAT.png','RealPPSH.png','Ribbon.png','Rin.png','Ron.png','Sae.png','Scylla.png','See.png','Sett.png','Shelly.png','Shu.png','Skell.png','SkellDad.png','SkellMom.png','Snom.png','Soria.png','Sprout.png','Stellar.png','Table.png','Thia.png','Tiar.png','Trench.png','Try.png','Turn.png','Uso.png','Vee.png','Vera.png','Verdict.png','Voice.png','Volt.png','Wat.png','Way.png','Yune.png','Ziri.png'];
 
@@ -22,6 +24,7 @@ let expertMode = false;
 let drawnCharacters = [];
 const $ = selector => document.querySelector(selector);
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)];
+const randomItem = items => items[Math.floor(Math.random() * items.length)];
 const scoreFor = (character, category) => character.scores[category] ?? '';
 const scoreLabel = score => score === '' ? '' : String(score);
 const bestAvailableStatFor = (character, availableCategories) => {
@@ -140,11 +143,14 @@ function showJumpscare(onComplete) {
   rolling = true;
   renderCategories();
   const jumpscare = $('#jumpscare');
+  const image = $('#jumpscare-image');
   const sound = $('#jumpscare-sound');
+  image.src = `images/jumpscares/${encodeURIComponent(randomItem(jumpscareFiles))}`;
   jumpscare.classList.remove('hidden');
   jumpscare.setAttribute('aria-hidden', 'false');
   sound.pause();
   sound.currentTime = 0;
+  sound.src = `sound/${encodeURIComponent(randomItem(jumpscareSounds))}`;
   sound.volume = 1;
   sound.play().catch(() => {});
   setTimeout(() => {

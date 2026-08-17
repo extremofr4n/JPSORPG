@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junkyard Protocol · Character Tier List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-xl navbar-custom navbar-dark"><div class="container"><a class="navbar-brand" href="#">Junkyard Protocol | EcoTargets RPG</a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="siteNav"><ul class="navbar-nav ms-auto fs-5 gap-xl-5"><li class="nav-item"><a class="nav-link" href="index.html">Character Draft</a></li><li class="nav-item"><a class="nav-link active" href="tierlist.html">Tier List</a></li><li class="nav-item"><a class="nav-link" href="../index.html">Return to Wiki</a></li></ul></div></div></nav>
+  <main class="pagebg container my-4 my-md-5">
+    <section class="landing text-center py-4 py-md-5" id="tier-landing">
+      <h1 class="fw-bold">Character Tier List</h1>
+      <p class="lead mx-auto mt-4">Choose the stronger character from each random matchup. The game then checks every final placement, so the complete roster ranking reflects your choices as accurately as possible.</p>
+      <button class="btn btn-primary btn-lg mt-3" id="tier-start" type="button">Start ranking</button>
+      <p class="text-muted small mt-3 mb-0">Full roster · every choice matters</p>
+    </section>
+    <section class="tier-game hidden" id="tier-game">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4"><div><h1 class="fw-bold mb-1">Who ranks higher?</h1><p class="mb-0 text-muted" id="tier-progress"></p></div><button class="btn btn-outline-secondary" id="tier-reset" type="button">New roster</button></div>
+      <p class="matchup-prompt text-center mb-3">Choose the character you would place higher.</p>
+      <div class="row g-3 align-items-stretch" id="matchup" aria-live="polite"></div>
+    </section>
+    <section class="finished hidden text-center py-3" id="tier-result">
+      <h1 class="fw-bold">Your Character Ranking</h1>
+      <p class="lead text-muted">From first place to last place.</p>
+      <div class="row g-2 text-start my-4" id="ranking-list"></div>
+      <button class="btn btn-primary btn-lg" id="tier-again" type="button">Rank a new roster</button>
+    </section>
+  </main>
+  <div class="jumpscare hidden" id="jumpscare" aria-hidden="true"><img id="jumpscare-image" src="" alt=""></div>
+  <audio id="jumpscare-sound" preload="auto"></audio>
+  <footer>© Francisco Preto 2026</footer>
+  <script src="js/tierlist.js"></script>
+</body>
+</html>
