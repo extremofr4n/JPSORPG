@@ -26,7 +26,7 @@
       <h1 class="text-capitalize fw-bold">Build Your Perfect Character</h1>
       <p class="lead mx-auto mt-4">A character appears. Click the category you want to keep, then a new character is drawn. Complete every category to finish your survivor.</p>
       <button class="btn btn-primary btn-lg mt-3" id="start-button" type="button">Start Draft</button>
-      <p class="text-muted small mt-3 mb-0">11 categories · choose only one quality from each character</p>
+      <p class="text-muted small mt-3 mb-0">12 categories · choose one quality from each character</p>
     </section>
 
     <section class="draft hidden" id="draft">
@@ -52,6 +52,7 @@
     <section class="finished hidden text-center py-3" id="result">
       <h1 class="text-capitalize fw-bold">Your Perfect Character</h1>
       <p class="lead text-muted">Every category has been selected.</p>
+      <p class="final-score" id="final-score" aria-live="polite"></p>
       <div class="row g-2 text-start my-4" id="score-grid"></div>
       <button class="btn btn-primary btn-lg" id="play-again" type="button">Draft again</button>
     </section>
