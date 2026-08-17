@@ -24,18 +24,12 @@ const $ = selector => document.querySelector(selector);
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)];
 const scoreFor = (character, category) => character.scores[category] ?? '';
 const scoreLabel = score => score === '' ? '' : String(score);
-const bestStatFor = character => {
-  const values = scoreKeys.map(category => Number(scoreFor(character, category)) || 0);
-  const bestValue = Math.max(...values);
-  return scoreKeys.filter((category, index) => values[index] === bestValue).join(' / ');
-};
-const displayName = (character, bestStat = bestStatFor(character)) => expertMode && bestStat ? `(${bestStat}) ${character.name}` : character.name;
 
 function renderCategories() {
   $('#category-tracker').innerHTML = categories.map((category, index) => {
     const choice = picked.find(item => item.category === category);
     const score = expertMode ? '' : choice ? scoreLabel(choice.score) : current && !rolling ? scoreLabel(scoreFor(current, category)) : '';
-    const character = choice ? `<em>${expertMode && choice.bestStat ? `(${choice.bestStat}) ` : ''}${choice.character}</em>` : '';
+    const character = choice ? `<em>${choice.character}</em>` : '';
     return `<div class="col-sm-6 col-lg-4"><button class="category ${choice ? 'complete' : ''}" type="button" data-category="${category}" ${choice || rolling ? 'disabled' : ''}><small>${String(index + 1).padStart(2, '0')}</small><span><strong>${category}</strong>${character}</span>${score ? `<b class="category-score">${score}</b>` : ''}</button></div>`;
   }).join('');
   document.querySelectorAll('.category:not(:disabled)').forEach(button => button.addEventListener('click', () => selectCategory(button.dataset.category)));
@@ -45,7 +39,7 @@ function renderCharacter(character) {
   const image = $('#character-image');
   image.style.backgroundImage = `url("${character.image}")`;
   image.innerHTML = '';
-  $('#character-name').textContent = displayName(character);
+  $('#character-name').textContent = character.name;
 }
 
 function drawCharacter() {
@@ -72,7 +66,7 @@ function drawCharacter() {
 
 function selectCategory(category) {
   if (rolling) return;
-  picked.push({ category, character: current.name, image: current.image, score: scoreFor(current, category), bestStat: bestStatFor(current) });
+  picked.push({ category, character: current.name, image: current.image, score: scoreFor(current, category), drawIndex: drawnCharacters.length - 1 });
   if (picked.length === categories.length) return showResult();
   drawCharacter();
 }
@@ -94,29 +88,35 @@ function showResult() {
   $('#draft').classList.add('hidden');
   $('#result').classList.remove('hidden');
   const currentTotal = picked.reduce((total, item) => total + (Number(item.score) || 0), 0);
-  const optimalTotal = getOptimalTotal(drawnCharacters);
-  $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${optimalTotal}</strong><small>best possible from your draws</small>`;
-  $('#score-grid').innerHTML = picked.map(item => `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${expertMode && item.bestStat ? `(${item.bestStat}) ` : ''}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`).join('');
+  const optimalDraft = getOptimalDraft(drawnCharacters);
+  $('#final-score').innerHTML = `<span>Final score</span><strong>${currentTotal} / ${optimalDraft.total}</strong><small>best possible from your draws</small>`;
+  $('#score-grid').innerHTML = picked.map(item => {
+    const optimalStat = optimalDraft.assignments[item.drawIndex];
+    return `<div class="col-sm-6 col-lg-4"><article class="final"><div><small>${[item.category, scoreLabel(item.score)].filter(Boolean).join(' · ')}</small><strong>${expertMode && optimalStat ? `(${optimalStat}) ` : ''}${item.character}</strong></div><img src="${item.image}" alt="${item.character}"></article></div>`;
+  }).join('');
 }
 
-function getOptimalTotal(charactersDrawn) {
-  let totals = Array(1 << categories.length).fill(-Infinity);
-  totals[0] = 0;
+function getOptimalDraft(charactersDrawn) {
+  let drafts = Array(1 << categories.length);
+  drafts[0] = { total: 0, assignments: [] };
 
   charactersDrawn.forEach(character => {
-    const nextTotals = Array(1 << categories.length).fill(-Infinity);
-    totals.forEach((total, usedCategories) => {
-      if (total === -Infinity) return;
+    const nextDrafts = Array(1 << categories.length);
+    drafts.forEach((draft, usedCategories) => {
+      if (!draft) return;
       categories.forEach((category, index) => {
         if (usedCategories & (1 << index)) return;
         const newMask = usedCategories | (1 << index);
-        nextTotals[newMask] = Math.max(nextTotals[newMask], total + (Number(scoreFor(character, category)) || 0));
+        const total = draft.total + (Number(scoreFor(character, category)) || 0);
+        if (!nextDrafts[newMask] || total > nextDrafts[newMask].total) {
+          nextDrafts[newMask] = { total, assignments: [...draft.assignments, category] };
+        }
       });
     });
-    totals = nextTotals;
+    drafts = nextDrafts;
   });
 
-  return Math.max(...totals);
+  return drafts.reduce((best, draft) => !draft || best && best.total >= draft.total ? best : draft, null);
 }
 
 $('#start-button').addEventListener('click', start);
